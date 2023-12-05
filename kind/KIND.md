@@ -95,7 +95,7 @@ nodes:
   - role: control-plane
   - role: worker
   - role: worker
-  - role: worker    
+  - role: worker
 ```
 
 ### Crie o cluster
@@ -137,4 +137,18 @@ kubectl get nodes
 
 ```bash
 code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+```
+
+## Criando um pod atraves do kubectl apply
+
+### Criando um pod
+
+```bash
+kubectl apply -f k8s/pod.yaml
+
+# Voce pode testar a aplicacao usando um port-forward
+kubectl port-forward pod/goserver 8080:80
+
+# Excluindo o pod
+kubectl delete pod goserver
 ```
