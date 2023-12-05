@@ -12,9 +12,8 @@ brew install minikube
 ### Linux
 
 ```bash
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
-chmod +x ./kind
-mv ./kind /some-dir-in-your-PATH/kind
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
 ```bash
@@ -26,38 +25,39 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 ### Windows
 
 ```bash
-curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.9.0/kind-windows-amd64
-Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
-```
-
-```bash
 curl -LO https://dl.k8s.io/release/v1.20.0/bin/windows/amd64/kubectl.exe
 Move-Item .\kubectl.exe C:\some-dir-in-your-PATH\kubectl.exe
 ```
 
 ```bash
 choco install kubernetes-cli
-choco install kind
-```
-
-### Docker
-
-```bash
-docker pull kindest/node:v1.20.0
+choco install minikube
 ```
 
 ## Cluster local
 
-### Criando um cluster
+### Iniciando o cluster
 
 ```bash
-kind create cluster --name kind-cluster
+# criando o cluster com docker, versao do kubernetes e nome do cluster
+minikube start --driver=docker --kubernetes-version=latest --vm=true
+
+# removendo o cluster
+minikube delete
+```
+
+### Adicionando alguns addons ao cluster
+
+```bash
+minikube addons enable metrics-server # kubectl top nodes
+minikube addons enable dashboard # dashboard
+minikube addons enable ingress # nginx ingress controller
 ```
 
 ### Configurando o kubectl
 
 ```bash
-kubectl cluster-info --context kind-kind-cluster
+kubectl cluster-info --context minikube
 ```
 
 ### Listando os containers do cluster
@@ -66,16 +66,16 @@ kubectl cluster-info --context kind-kind-cluster
 docker ps
 ```
 
-### Listando os clusters
+### Verificando o status do cluster
 
 ```bash
-kind get clusters
+minikube status
 ```
 
-### Listando os nodes
+### Abrindo o dashboard do cluster
 
 ```bash
-kubectl get nodes
+minikube dashboard --url
 ```
 
 ### Excluindo um cluster
@@ -95,7 +95,7 @@ nodes:
   - role: control-plane
   - role: worker
   - role: worker
-  - role: worker    
+  - role: worker
 ```
 
 ### Crie o cluster
